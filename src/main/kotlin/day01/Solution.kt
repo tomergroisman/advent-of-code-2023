@@ -42,7 +42,8 @@ fun main() {
             val calibrationValue = getCalibrationValue(parsedLine)
             calibrationValues.add(calibrationValue)
         }
-        return calibrationValues.sum()    }
+        return calibrationValues.sum()
+    }
 
     val testInput = readInput("$packageName/input_test")
     check(part1(testInput) == 209)
