@@ -1,13 +1,14 @@
 package day02
 
+import Input
 import println
 import readInput
 
 const val packageName = "day02"
 
 fun main() {
-    fun convertGames(input: List<String>): List<Game> {
-        return input.map { gameData ->
+    fun Input.getGames(): List<Game> {
+        return this.map { gameData ->
             val splitGameData: MutableList<String> = gameData
                 .replace(Regex("Game (\\d+):"), "$1;")
                 .split("; ")
@@ -39,8 +40,8 @@ fun main() {
         }
     }
 
-    fun part1(input: List<String>): Int {
-        val games = convertGames(input)
+    fun part1(input: Input): Int {
+        val games = input.getGames()
         val possibleGames = games.filter {
             it.cubesReveled.maxReds <= 12 &&
             it.cubesReveled.maxGreens <= 13 &&
@@ -49,8 +50,8 @@ fun main() {
         return possibleGames.sumOf { it.id }
     }
 
-    fun part2(input: List<String>): Int {
-        val games = convertGames(input)
+    fun part2(input: Input): Int {
+        val games = input.getGames()
         val powerOsCubeSets = games.map {
             it.cubesReveled.maxReds *
             it.cubesReveled.maxGreens *

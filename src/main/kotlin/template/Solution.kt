@@ -1,16 +1,17 @@
 package template
 
+import Input
 import println
 import readInput
 
 const val packageName = "template"
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    fun part1(input: Input): Int {
         return input.size
     }
 
-    fun part2(input: List<String>): Int {
+    fun part2(input: Input): Int {
         return input.size
     }
 
@@ -21,3 +22,4 @@ fun main() {
     part1(input).println()
     part2(input).println()
 }
+

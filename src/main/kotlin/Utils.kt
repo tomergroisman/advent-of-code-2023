@@ -23,17 +23,25 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 fun Any?.println() = println(this)
 
 /**
- * Stops the output of the program
+ * A type alias for the input.
+ */
+typealias Input = List<String>
+
+/**
+ * Stops the output of the program.
  */
 fun stopOutput() {
     System.setOut(PrintStream(object : OutputStream() { override fun write(b: Int) {} }))
 }
 
 /**
- * Resume the output of the program
+ * Resume the output of the program.
  */
 fun resumeOutput() {
     System.setOut(originalStream)
 }
 
+/**
+ * The original stream instance.
+ */
 val originalStream: PrintStream = System.out

@@ -1,28 +1,29 @@
 package day01
 
+import Input
 import println
 import readInput
 
 const val packageName = "day01"
 
 fun main() {
-    fun getCalibrationValue(line: String): Int {
-        val value = line.replace(Regex("^[a-z]*([0-9])?.*([0-9])[a-z]*\$"), "$1$2")
+    fun String.getCalibrationValue(): Int {
+        val value = this.replace(Regex("^[a-z]*([0-9])?.*([0-9])[a-z]*\$"), "$1$2")
         return (if (value.length == 1) "$value$value" else value).toInt()
     }
 
-    fun part1(lines: List<String>): Int {
+    fun part1(input: Input): Int {
         val calibrationValues = mutableListOf<Int>()
-        lines.forEach {line ->
-            val calibrationValue = getCalibrationValue(line)
+        input.forEach {line ->
+            val calibrationValue = line.getCalibrationValue()
             calibrationValues.add(calibrationValue)
         }
         return calibrationValues.sum()
     }
 
-    fun part2(lines: List<String>): Int {
+    fun part2(input: Input): Int {
         val calibrationValues = mutableListOf<Int>()
-        lines.forEach {line ->
+        input.forEach {line ->
             val parsedLine = line
                 .replace("one", "one1one")
                 .replace("two", "two2two")
@@ -34,7 +35,7 @@ fun main() {
                 .replace("eight", "eight8eight")
                 .replace("nine", "nine9nine")
 
-            val calibrationValue = getCalibrationValue(parsedLine)
+            val calibrationValue = parsedLine.getCalibrationValue()
             calibrationValues.add(calibrationValue)
         }
         return calibrationValues.sum()
