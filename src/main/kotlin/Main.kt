@@ -7,9 +7,10 @@ fun main() {
     days.add(Day(3, { day03.main() }, "Gear Ratios"))
     days.add(Day(4, { day04.main() }, "Scratchcards"))
     days.add(Day(5, { day05.main() }, "If You Give A Seed A Fertilizer"))
+    days.add(Day(6, { day06.main() }, "Wait For It"))
 
     stopOutput()
-    val executionTime = measureTime { days.forEach { it.execution()} }
+    val executionTime = measureTime { days.forEach { it.execution() } }
     resumeOutput()
 
     println("The whole advent took: ${executionTime.inWholeMilliseconds} milliseconds");
