@@ -21,10 +21,6 @@ fun main() {
         }
     }
 
-    fun List<Hand>.println() {
-        this.forEach { it.println() }
-    }
-
     fun part1(input: Input): Int {
         val hands = input.toHands()
         val ranks = hands.sortedWith(Hand.comparator)
@@ -35,7 +31,6 @@ fun main() {
         cardValueByCardSymbol['J'] = 1
         val hands = input.toJokerHands()
         val ranks = hands.sortedWith(Hand.comparator)
-        ranks.println()
         return ranks.map { it.bid }.reduceIndexed { index, acc, bid -> acc + (index + 1) * bid }
     }
 
