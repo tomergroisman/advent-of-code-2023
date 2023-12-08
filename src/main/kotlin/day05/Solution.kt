@@ -5,8 +5,7 @@ import println
 import readInput
 import kotlinx.coroutines.*
 import java.lang.Long.min
-import kotlin.system.measureTimeMillis
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.measureTime
 
 const val packageName = "day05"
 
@@ -82,7 +81,7 @@ fun main() {
                 val seedRange = seedRanges[seedRangeNumber - 1]
                 tasks.add(
                     launch(Dispatchers.IO) {
-                        val timeInMillis = measureTimeMillis {
+                        val timeInMillis = measureTime {
                             var minLocationNumber = Long.MAX_VALUE
                             for (i in seedRange.start..seedRange.end) {
                                 val locationNumber = i.getLocationNumber(fromCategoryToCategoryMap)
@@ -90,13 +89,13 @@ fun main() {
                             }
                             mins.add(minLocationNumber)
                         }
-                        println("Ran range $seedRangeNumber of ${seedRanges.size} [${seedRange.start} - ${seedRange.end}] in ${timeInMillis.seconds} seconds")
+                        println("Ran range $seedRangeNumber of ${seedRanges.size} [${seedRange.start} - ${seedRange.end}] in ${timeInMillis.inWholeSeconds} seconds")
                     }
                 )
             }
             tasks.joinAll()
         }
-        
+
         return mins.min()
     }
 
