@@ -61,7 +61,3 @@ fun main() {
 
 typealias ValueHistory = List<Long>
 typealias DiffSequence = List<Long>
-
-/**
- * tries:
- */
