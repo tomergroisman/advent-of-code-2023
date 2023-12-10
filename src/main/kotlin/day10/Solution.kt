@@ -9,14 +9,14 @@ const val packageName = "day10"
 fun main() {
     fun Input.toMazeMap(): MazeMap {
         val paddedEmptyRow = mutableListOf<Char>()
-        for (i in 1..this.size + 2) {
-            paddedEmptyRow.add('.')
+        for (i in 1..this[0].length + 2) {
+            paddedEmptyRow.add('X')
         }
         val paddedInput = mutableListOf(paddedEmptyRow)
         for (row in this) {
-            val paddedRow = mutableListOf('.')
+            val paddedRow = mutableListOf('X')
             paddedRow.addAll(row.toCharArray().toList())
-            paddedRow.add('.')
+            paddedRow.add('X')
             paddedInput.add(paddedRow)
         }
         paddedInput.add(paddedEmptyRow)
@@ -26,16 +26,16 @@ fun main() {
     fun part1(input: Input): Long {
         val maze = Maze(input.toMazeMap())
         val loopSteps = maze.solve()
-        println(loopSteps)
         return loopSteps / 2
     }
 
-    fun part2(input: Input): Int {
-        return input.size
+    fun part2(input: Input): Long {
+        val maze = Maze(input.toMazeMap())
+        return maze.countInnerTies()
     }
 
     val testInput = readInput("$packageName/input_test")
-    check(part1(testInput) == 8.toLong())
+    check(part2(testInput) == 10.toLong())
 
     val input = readInput("$packageName/input")
     part1(input).println()
@@ -46,11 +46,13 @@ typealias MazeMap = MutableList<MutableList<Char>>
 
 data class Position(var x: Int, var y: Int)
 class Maze(map: MazeMap) {
-    val map = map.toMutableList()
+    private val originalMap = map
+    private val pipeMap = map.map { it.map { char -> char }.toMutableList() }.toMutableList()
+    private val innerTileMap = map.map { it.map { char -> char }.toMutableList() }.toMutableList()
 
     private fun findStart(): Position {
-        for (i in map.indices) {
-            val row = map[i]
+        for (i in originalMap.indices) {
+            val row = originalMap[i]
             for (j in row.indices) {
                 val char = row[j]
                 if (char == 'S') {
@@ -64,7 +66,7 @@ class Maze(map: MazeMap) {
     private fun isConnected(source: Char, destination: Char, destinationDirection: Direction): Boolean {
         when (destinationDirection) {
             Direction.north -> {
-                val acceptingDestinations = listOf('|', '7', 'F', 'S')
+                val acceptingDestinations = listOf('|', '7', 'F')
                 return when (source) {
                     'S' -> acceptingDestinations.contains(destination)
                     '|' -> acceptingDestinations.contains(destination)
@@ -75,7 +77,7 @@ class Maze(map: MazeMap) {
             }
 
             Direction.east -> {
-                val acceptingDestinations = listOf('-', '7', 'J', 'S')
+                val acceptingDestinations = listOf('-', '7', 'J')
                 return when (source) {
                     'S' -> acceptingDestinations.contains(destination)
                     '-' -> acceptingDestinations.contains(destination)
@@ -86,7 +88,7 @@ class Maze(map: MazeMap) {
             }
 
             Direction.south -> {
-                val acceptingDestinations = listOf('|', 'L', 'J', 'S')
+                val acceptingDestinations = listOf('|', 'L', 'J')
                 return when (source) {
                     'S' -> acceptingDestinations.contains(destination)
                     '|' -> acceptingDestinations.contains(destination)
@@ -97,7 +99,7 @@ class Maze(map: MazeMap) {
             }
 
             Direction.west -> {
-                val acceptingDestinations = listOf('-', 'L', 'F', 'S')
+                val acceptingDestinations = listOf('-', 'L', 'F')
                 return when (source) {
                     'S' -> acceptingDestinations.contains(destination)
                     '-' -> acceptingDestinations.contains(destination)
@@ -112,11 +114,11 @@ class Maze(map: MazeMap) {
 
     fun solve(): Long {
         var position = findStart()
-        println(position)
         var steps = 0.toLong()
 
         do {
-            val source = map[position.y][position.x]
+            val source = pipeMap[position.y][position.x]
+            var hasConnected = false
             for (direction in Direction.entries) {
                 val destinationPosition = position.copy()
                 when (direction) {
@@ -125,19 +127,68 @@ class Maze(map: MazeMap) {
                     Direction.south -> destinationPosition.y += 1
                     Direction.west -> destinationPosition.x -= 1
                 }
-                val destination = map[destinationPosition.y][destinationPosition.x]
+                val destination = pipeMap[destinationPosition.y][destinationPosition.x]
                 if (isConnected(source, destination, direction)) {
-                    if (source != 'S') {
-                        map[position.y][position.x] = 'X'
-                    }
+                    hasConnected = true
+                    pipeMap[position.y][position.x] = 'X'
                     position = destinationPosition
                     steps++
                     break
+                };
+            }
+        } while (hasConnected)
+        pipeMap[position.y][position.x] = 'X'
+
+        return steps
+    }
+
+    fun countInnerTies(): Long {
+        solve()
+
+        var innerTiles = 0.toLong()
+
+        for (i in originalMap.indices) {
+            var isInside = false
+            var lastBendChar: Char? = null
+            val row = originalMap[i]
+            for (j in row.indices) {
+                val isPipe = pipeMap[i][j] == 'X'
+                fun incrementInnerTiles() {
+                    if (!isPipe) {
+                        innerTiles++
+                        innerTileMap[i][j] = 'I'
+                    }
+                }
+
+                when (val char = originalMap[i][j]) {
+                    '|' -> if (isPipe) isInside = !isInside else if (isInside) incrementInnerTiles()
+
+                    'F' -> if (isPipe) lastBendChar = char else if (isInside) incrementInnerTiles()
+
+                    'J' -> {
+                        if (isPipe && lastBendChar == 'F') {
+                            isInside = !isInside
+                            lastBendChar = char
+                        } else if (isInside) incrementInnerTiles()
+                    }
+
+                    'L' -> if (isPipe) lastBendChar = char else if (isInside) incrementInnerTiles()
+
+                    '7' -> {
+                        if (isPipe && lastBendChar == 'L') {
+                            isInside = !isInside
+                            lastBendChar = char
+                        } else if (isInside) incrementInnerTiles()
+                    }
+
+                    else -> if (isInside) incrementInnerTiles()
                 }
             }
-        } while (map[position.y][position.x] != 'S')
-        return steps
+        }
+        return innerTiles
     }
 }
 
 enum class Direction { north, east, south, west }
+
+// Tries: 349 High 348 high
