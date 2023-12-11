@@ -190,5 +190,3 @@ class Maze(map: MazeMap) {
 }
 
 enum class Direction { north, east, south, west }
-
-// Tries: 349 High 348 high
