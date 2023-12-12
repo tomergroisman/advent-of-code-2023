@@ -12,7 +12,8 @@ fun main() {
     days.add(Day(8, { day08.main() }, "Haunted Wasteland"))
     days.add(Day(9, { day09.main() }, "Mirage Maintenance"))
     days.add(Day(10, { day10.main() }, "Pipe Maze"))
-    days.add(Day(1, { day11.main() }, "Cosmic Expansion"))
+    days.add(Day(11, { day11.main() }, "Cosmic Expansion"))
+    days.add(Day(12, { day12.main() }, "Hot Springs"))
 
     stopOutput()
     val executionTime = measureTime { days.forEach { it.execution() } }

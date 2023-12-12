@@ -23,6 +23,12 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 fun Any?.println() = println(this)
 
 /**
+ * Print the collection with a newline after each item
+ */
+fun Iterable<Any>.println() {
+    this.forEach { it.println() }
+}
+/**
  * A type alias for the input.
  */
 typealias Input = List<String>
@@ -31,7 +37,9 @@ typealias Input = List<String>
  * Stops the output of the program.
  */
 fun stopOutput() {
-    System.setOut(PrintStream(object : OutputStream() { override fun write(b: Int) {} }))
+    System.setOut(PrintStream(object : OutputStream() {
+        override fun write(b: Int) {}
+    }))
 }
 
 /**
