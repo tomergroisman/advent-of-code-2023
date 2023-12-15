@@ -23,51 +23,33 @@ fun main() {
         return patterns
     }
 
-    fun List<Char>.isPointOfReflection(i: Int): Boolean {
-        val distanceFromStart = i + 1
-        val distanceFromEnd = this.size - i - 1
-        val distanceFromEdge = min(distanceFromStart, distanceFromEnd)
-        for (j in 0..<distanceFromEdge) {
-            val char1 = this[i + j + 1]
-            val char2 = this[i - j]
-            if (char1 != char2) return false
-        }
-        return true
-    }
-
-    fun Pattern.findVerticalReflectionIndex(): Int {
-        val perfectReflectionPointsCandidates = mutableSetOf<Int>()
-        for (row in this) {
-            for (i in 1..<row.size - 1) {
-                if (row.isPointOfReflection(i)) {
-                    perfectReflectionPointsCandidates.add(i)
+    fun Pattern.findHorizontalReflectionIndex(): Int {
+        for (i in 1..<this.size) {
+            if (this[i] == this[i - 1]) {
+                var isMirror = true
+                for (j in 1..min(i - 1, this.size - 1 - i)) {
+                    if (this[i + j] != this[i - 1 - j]) {
+                        isMirror = false
+                        break
+                    }
                 }
+                if (isMirror) return i
             }
         }
-
-        for (candidate in perfectReflectionPointsCandidates)
-            if (this.all { it.isPointOfReflection(candidate) }) return candidate + 1
         return 0
     }
 
-    fun Pattern.findHorizontalReflectionIndex(): Int {
+    fun Pattern.findVerticalReflectionIndex(): Int {
         val cols = this[0].size
         val rows = this.size
         val transposedPattern = List(cols) { j ->
             List(rows) { i -> this[i][j] }
         }
-        return transposedPattern.findVerticalReflectionIndex()
+        return transposedPattern.findHorizontalReflectionIndex()
     }
-
 
     fun part1(input: Input): Long {
         val patterns = input.toPatterns()
-        println(patterns.map {
-            val verticalReflectionIndex = it.findVerticalReflectionIndex()
-            val horizontalReflectionIndex = it.findHorizontalReflectionIndex()
-            println("$verticalReflectionIndex $horizontalReflectionIndex")
-            (verticalReflectionIndex + 100 * horizontalReflectionIndex).toLong()
-        })
         return patterns.sumOf {
             val verticalReflectionIndex = it.findVerticalReflectionIndex()
             val horizontalReflectionIndex = it.findHorizontalReflectionIndex()
@@ -88,5 +70,3 @@ fun main() {
 }
 
 typealias Pattern = List<List<Char>>
-
-// Tries: 5386, 85014, 6606, 31368
