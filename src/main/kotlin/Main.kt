@@ -17,6 +17,7 @@ fun main() {
     days.add(Day(13, { day13.main() }, "Point of Incidence"))
     days.add(Day(14, { day14.main() }, "Parabolic Reflector Dish"))
     days.add(Day(15, { day15.main() }, "Lens Library"))
+    days.add(Day(16, { day15.main() }, "The Floor Will Be Lava"))
 
     stopOutput()
     val executionTime = measureTime { days.forEach { it.execution() } }
