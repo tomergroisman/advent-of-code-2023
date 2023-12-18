@@ -57,7 +57,7 @@ val originalStream: PrintStream = System.out
 /**
  * A i, j position data class
  */
-data class Position(val i: Int, val j: Int) {
+data class Position(var i: Int, var j: Int) {
     fun copy(i: Int?, j: Int?): Position {
         return Position(i ?: this.i, j ?: this.j)
     }
