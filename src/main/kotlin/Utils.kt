@@ -53,3 +53,14 @@ fun resumeOutput() {
  * The original stream instance.
  */
 val originalStream: PrintStream = System.out
+
+/**
+ * A i, j position data class
+ */
+data class Position(val i: Int, val j: Int) {
+    fun copy(i: Int?, j: Int?): Position {
+        return Position(i ?: this.i, j ?: this.j)
+    }
+
+    override fun toString() = "$i $j"
+}

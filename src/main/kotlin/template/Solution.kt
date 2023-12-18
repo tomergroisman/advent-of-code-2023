@@ -7,16 +7,16 @@ import readInput
 const val packageName = "template"
 
 fun main() {
-    fun part1(input: Input): Int {
-        return input.size
+    fun part1(input: Input): Long {
+        return input.size.toLong()
     }
 
-    fun part2(input: Input): Int {
-        return input.size
+    fun part2(input: Input): Long {
+        return input.size.toLong()
     }
 
     val testInput = readInput("$packageName/input_test")
-    check(part1(testInput) == 1)
+    check(part1(testInput) == 1.toLong())
 
     val input = readInput("$packageName/input")
     part1(input).println()
