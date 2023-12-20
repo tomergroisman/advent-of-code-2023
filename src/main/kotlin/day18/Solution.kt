@@ -49,12 +49,11 @@ fun main() {
 
     fun part1(input: Input): Long {
         val instructions = input.toInstructions()
-        return Trench(instructions).solveWithMath()
+        return Trench(instructions).solveWithBruteForce()
     }
 
     fun part2(input: Input): Long {
         val instructions = input.toBuggyInstructions()
-        instructions.println()
         return Trench(instructions).solveWithMath()
     }
 
@@ -82,11 +81,10 @@ data class Trench(val instructions: List<Instruction>) {
                 'U' -> Pair(-instruction.dig, 0)
                 else -> Pair(0, 0)
             }
-            println(current)
             current = Pair(current.first + delta.first, current.second + delta.second)
             area += current.second * delta.first
         }
-        
+
         return (area + perimeter / 2) + 1
     }
 
