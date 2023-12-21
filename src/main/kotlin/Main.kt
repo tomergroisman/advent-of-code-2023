@@ -21,6 +21,7 @@ fun main() {
     days.add(Day(17, { day17.main() }, "Clumsy Crucible"))
     days.add(Day(18, { day18.main() }, "Lavaduct Lagoon"))
     days.add(Day(19, { day19.main() }, "Aplenty"))
+    days.add(Day(20, { day19.main() }, "Pulse Propagation"))
 
     stopOutput()
     val executionTime = measureTime { days.forEach { it.execution() } }
