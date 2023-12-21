@@ -98,7 +98,6 @@ fun main() {
             steps++
             while (q.isNotEmpty()) {
                 if (cycleByModuleName.values.size == 4) {
-                    println(cycleByModuleName)
                     return cycleByModuleName.values.toList().lcm()
                 }
 
