@@ -1,3 +1,4 @@
+import day22.Point
 import java.io.OutputStream
 import java.io.PrintStream
 import java.math.BigInteger
@@ -62,5 +63,15 @@ data class Position(var i: Int, var j: Int) {
         return Position(i ?: this.i, j ?: this.j)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is Position) return false
+        return this.i == other.i && this.j == other.j
+    }
+
     override fun toString() = "$i $j"
+    override fun hashCode(): Int {
+        var result = i
+        result = 31 * result + j
+        return result
+    }
 }
