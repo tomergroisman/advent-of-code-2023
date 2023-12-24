@@ -16,7 +16,6 @@ fun main() {
 
     fun part2(input: Input): Int {
         val trailMap = TrailMap(input, canClimb = true)
-        println(trailMap.getLongestHike())
         return trailMap.getLongestHike()
     }
 
